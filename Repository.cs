@@ -15,8 +15,7 @@ public class Repository<T> : IRepository<T> where T : class, new()
     public T AddItem(T entity)
     {
         _context.Set<T>().Add(entity);
-        _context.SaveChanges();
-        return _context.Set<T>()?.AsEnumerable()?.LastOrDefault();
+        return entity;
     }
     public T GetItem(Expression<Func<T, bool>> predicate)
      => _context.Set<T>()?.FirstOrDefault(predicate);

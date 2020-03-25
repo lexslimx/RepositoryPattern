@@ -5,5 +5,6 @@ using System;
 public interface IUnitOfWork : IDisposable
 {
     IStudentRepository Students { get; }
+    ISubjectRepository Subjects { get; }
     void Complete(); //Completion of a unit of work can also be called savel
 }

@@ -6,8 +6,7 @@ using System.Text;
 namespace RepositoryPattern
 {
     public interface IStudentRepository : IRepository<Student>
-    {
-        void AddStudent();
+    {      
         Student GetOneStudent();
         List<Student> GetAllStudents();
     }
