@@ -5,32 +5,39 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using RepositoryPattern.Database;
 
-public class Repository<T> : IRepository<T> where T : class, new()
+public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, new()
 {
     protected readonly DbContext _context;
     public Repository(DbContext context)
     {
         _context = context;
     }
-    public T AddItem(T entity)
+    public TEntity AddItem(TEntity entity)
     {
-        _context.Set<T>().Add(entity);
+        _context.Set<TEntity>().Add(entity);
         _context.SaveChanges();
-        return _context.Set<T>()?.AsEnumerable()?.LastOrDefault();
+        return _context.Set<TEntity>()?.AsEnumerable()?.LastOrDefault();
     }
-    public T GetItem(Expression<Func<T, bool>> predicate)
-     => _context.Set<T>()?.FirstOrDefault(predicate);
-    public IEnumerable<T> GetItems(Expression<Func<T, bool>> predicate)
-     => _context.Set<T>().Where(predicate);
-    public (IEnumerable<T> items, int count) GetItems(Expression<Func<T, bool>> predicate, int? skipSize, int? count)
-    => (
-        _context.Set<T>().Where(predicate).Skip((int)skipSize).Take((int)count),
-        _context.Set<T>().Where(predicate).ToList().Count()
-      );
-    public void Remove(Expression<Func<T, bool>> predicate)
+    public TEntity AddItems(ICollection<TEntity> entities)
     {
-        T item = _context.Set<T>().FirstOrDefault(predicate);
+        _context.Set<TEntity>().AddRange(entities);
+        _context.SaveChanges();
+        return _context.Set<TEntity>()?.AsEnumerable()?.LastOrDefault();
+    }
+    public TEntity GetItem(Expression<Func<TEntity, bool>> predicate)
+     => _context.Set<TEntity>()?.FirstOrDefault(predicate);
+    public IEnumerable<TEntity> GetItems(Expression<Func<TEntity, bool>> predicate)
+     => _context.Set<TEntity>().Where(predicate);
+    public (IEnumerable<TEntity> items, int count) GetItems(Expression<Func<TEntity, bool>> predicate, int? skipSize, int? count)
+    => (
+        _context.Set<TEntity>().Where(predicate).Skip((int)skipSize).Take((int)count),
+        _context.Set<TEntity>().Where(predicate).ToList().Count()
+      );
+    public void Remove(Expression<Func<TEntity, bool>> predicate)
+    {
+        TEntity item = _context.Set<TEntity>().FirstOrDefault(predicate);
         _context.Entry(item).State = EntityState.Deleted;
     }
+
+
 }
- 

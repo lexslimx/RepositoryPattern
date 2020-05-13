@@ -12,6 +12,6 @@ public interface IRepository<TEntity> where TEntity : class {
     (IEnumerable<TEntity> items, int count) GetItems(Expression<Func<TEntity, bool>> predicate, int? skipSize, int? count);
     void Remove(Expression<Func<TEntity, bool>> predicate);
 
-    //Add add range
+    TEntity AddItems(ICollection<TEntity> entities);
     //Add remove range
 }
