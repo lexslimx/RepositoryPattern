@@ -17,11 +17,6 @@ namespace RepositoryPattern
             _context = context;
         }
 
-        public void AddStudent()
-        {
-            _context.Students.Add(new Student { Name = "Alex" });            
-        }
-
         public List<Student> GetAllStudents()
         {
             return _context.Students.ToList();
